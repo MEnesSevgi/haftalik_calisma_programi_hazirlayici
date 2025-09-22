@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>Haftalık Ders Çalışma Programı 2.0</title>
+  <title>Haftalık Çalışma Programı 2.0</title>
   
 
 </head>
@@ -10,11 +10,11 @@
 <!-- partial:index.partial.html -->
 <!DOCTYPE html>
 <html lang="tr">
-  <!-- Gençler, hayat uzun bir maraton. Yarınlarda kazanılacak birçok başarı, sizleri bekliyor. Umut edin, hayal edin ve bu eğitim yolunu hakkını vererek yürümekten çekinmeyin. Yarının liderleri bugünün gençleridir. Büyük düşünün, gayret edin ve Allah'a tevekkül edin. Başarının şifresi budur. Yarınlar başarılarınızla dolsun. Allah'a emanet olun.(M. Enes SEVGİ) -->
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haftalık Ders Çalışma Programı</title>
+    <title>Haftalık Çalışma Programı Hazırlayıcı</title>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -50,7 +50,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Haftalık Ders Çalışma Programı</h1>
+            <h1>Haftalık Çalışma Programı</h1>
             <button class="add-button" onclick="createNewPlanner()">+ Yeni Program Oluştur</button>
         </div>
         <div id="planner" class="planner-grid">
@@ -70,9 +70,7 @@
         </div>
         <div id="table-display" class="table-display">
             <!-- Excel tablosu tarzı gösterim burada olacak -->
-        </div>
-        <div class="quote">Uzun yolculuklar küçük adımlarla başlar; sabır, gayret ve tevekkülle başarıya ulaşır.</div>
-    </div>
+      
     <script>
         let savedPlanners = [];
         let selectedPlannerIndex = null;
@@ -85,8 +83,8 @@
                     <h3>Pazartesi</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -96,8 +94,8 @@
                     <h3>Salı</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -107,8 +105,8 @@
                     <h3>Çarşamba</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -118,8 +116,8 @@
                     <h3>Perşembe</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -129,8 +127,8 @@
                     <h3>Cuma</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -140,8 +138,8 @@
                     <h3>Cumartesi</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -151,8 +149,8 @@
                     <h3>Pazar</h3>
                     <ul>
                         <li class="lesson-row">
-                            <input type="text" placeholder="Ders Adı">
-                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Ders/İş Adı">
+                            <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                             <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
                         </li>
                         <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
@@ -165,8 +163,8 @@
             const listItem = document.createElement('li');
             listItem.className = 'lesson-row';
             listItem.innerHTML = `
-                <input type="text" placeholder="Ders Adı">
-                <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                <input type="text" placeholder="Ders/İş Adı">
+                <input type="text" placeholder="Ders/İş Saati (Örnek: 10:00)">
                 <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
             `;
             button.parentNode.insertBefore(listItem, button);
