@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Haftalık Ders Çalışma Programı 2.0</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="tr">
+  <!-- Gençler, hayat uzun bir maraton. Yarınlarda kazanılacak birçok başarı, sizleri bekliyor. Umut edin, hayal edin ve bu eğitim yolunu hakkını vererek yürümekten çekinmeyin. Yarının liderleri bugünün gençleridir. Büyük düşünün, gayret edin ve Allah'a tevekkül edin. Başarının şifresi budur. Yarınlar başarılarınızla dolsun. Allah'a emanet olun.(M. Enes SEVGİ) -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haftalık Ders Çalışma Programı</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .add-button { background-color: #4caf50; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        .planner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .planner-day { background-color: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .planner-day h3 { margin-top: 0; }
+        .planner-day ul { list-style-type: none; padding: 0; }
+        .planner-day li { margin-bottom: 10px; }
+        .planner-day .lesson-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .planner-day input { padding: 5px; border: 1px solid #ddd; border-radius: 3px; width: 100%; }
+        .save-button { background-color: #2196f3; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-top: 20px; }
+        .saved-planners { margin-top: 30px; }
+        .saved-planners h2 { margin-bottom: 10px; }
+        .saved-planners ul { list-style-type: none; padding: 0; }
+        .saved-planners li { background-color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .saved-planners li:hover { background-color: #f1f1f1; }
+        .table-display { margin-top: 30px; }
+        .table-display table { width: 100%; border-collapse: collapse; }
+        .table-display th, .table-display td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .table-display th { background-color: #f2f2f2; }
+        .edit-button { background-color: #ff9800; color: white; border: none; padding: 5px 10px; cursor: button; border-radius: 3px; }
+        .delete-button { background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .add-lesson-btn { background-color: #4caf50; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; width: 100%; }
+        .export-options { margin-top: 20px; }
+        .export-options button { margin-right: 10px; }
+        .quote { text-align: center; margin-top: 20px; font-style: italic; color: #555; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Haftalık Ders Çalışma Programı</h1>
+            <button class="add-button" onclick="createNewPlanner()">+ Yeni Program Oluştur</button>
+        </div>
+        <div id="planner" class="planner-grid">
+            <!-- Planner content will be dynamically generated here -->
+        </div>
+        <button class="save-button" onclick="savePlanner()">Kaydet</button>
+        <div class="saved-planners">
+            <h2>Kaydedilen Programlar</h2>
+            <button class="edit-button" onclick="toggleDeleteMode()">Düzenle</button>
+            <ul id="saved-planners-list">
+                <!-- Saved planners will be dynamically listed here -->
+            </ul>
+            <div class="export-options">
+                <button onclick="exportToPDF()">PDF Olarak Dışarı Aktar</button>
+                <button onclick="exportToJPG()">JPG Olarak Dışarı Aktar</button>
+            </div>
+        </div>
+        <div id="table-display" class="table-display">
+            <!-- Excel tablosu tarzı gösterim burada olacak -->
+        </div>
+        <div class="quote">Uzun yolculuklar küçük adımlarla başlar; sabır, gayret ve tevekkülle başarıya ulaşır.</div>
+    </div>
+    <script>
+        let savedPlanners = [];
+        let selectedPlannerIndex = null;
+        let deleteMode = false;
+
+        function createNewPlanner() {
+            const planner = document.getElementById('planner');
+            planner.innerHTML = `
+                <div class="planner-day">
+                    <h3>Pazartesi</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Salı</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Çarşamba</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Perşembe</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Cuma</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Cumartesi</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+                <div class="planner-day">
+                    <h3>Pazar</h3>
+                    <ul>
+                        <li class="lesson-row">
+                            <input type="text" placeholder="Ders Adı">
+                            <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                            <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+                        </li>
+                        <li><button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button></li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function addLesson(button) {
+            const listItem = document.createElement('li');
+            listItem.className = 'lesson-row';
+            listItem.innerHTML = `
+                <input type="text" placeholder="Ders Adı">
+                <input type="text" placeholder="Ders Saati (Örnek: 10:00)">
+                <input type="text" placeholder="Tarih (Örnek: 2025-07-22)">
+            `;
+            button.parentNode.insertBefore(listItem, button);
+        }
+
+        function savePlanner() {
+            const plannerDays = document.querySelectorAll('.planner-day');
+            const plannerData = [];
+            const uniqueLessons = new Set();
+
+            plannerDays.forEach(day => {
+                const dayName = day.querySelector('h3').innerText;
+                const lessons = day.querySelectorAll('.lesson-row');
+                lessons.forEach(lesson => {
+                    const inputs = lesson.querySelectorAll('input');
+                    if (inputs.length >= 3) {
+                        const dersAdi = inputs[0].value.trim();
+                        const dersSaati = inputs[1].value.trim();
+                        const tarih = inputs[2].value.trim();
+                        
+                        if (dersAdi && dersSaati && tarih) {
+                            const lessonKey = `${dayName}-${dersAdi}-${dersSaati}-${tarih}`;
+                            if (!uniqueLessons.has(lessonKey)) {
+                                uniqueLessons.add(lessonKey);
+                                plannerData.push({ dayName, dersAdi, dersSaati, tarih });
+                            }
+                        }
+                    }
+                });
+            });
+
+            if (selectedPlannerIndex !== null) {
+                savedPlanners[selectedPlannerIndex] = plannerData;
+            } else {
+                savedPlanners.push(plannerData);
+            }
+
+            localStorage.setItem('savedPlanners', JSON.stringify(savedPlanners));
+            updateSavedPlannersList();
+            updateTableDisplay(plannerData);
+            selectedPlannerIndex = null;
+        }
+
+        function toggleDeleteMode() {
+            deleteMode = !deleteMode;
+            updateSavedPlannersList();
+        }
+
+        function updateSavedPlannersList() {
+            const savedPlannersList = document.getElementById('saved-planners-list');
+            savedPlannersList.innerHTML = '';
+            savedPlanners.forEach((planner, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `Program ${index + 1}`;
+                listItem.onclick = () => openPlanner(index);
+                const editButton = document.createElement('button');
+                editButton.innerText = 'Düzenle';
+                editButton.className = 'edit-button';
+                editButton.onclick = (e) => {
+                    e.stopPropagation();
+                    editPlanner(index);
+                };
+                listItem.appendChild(editButton);
+
+                if (deleteMode) {
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = '×';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.onclick = (e) => {
+                        e.stopPropagation();
+                        deletePlanner(index);
+                    };
+                    listItem.appendChild(deleteButton);
+                }
+
+                savedPlannersList.appendChild(listItem);
+            });
+        }
+
+        function openPlanner(index) {
+            const plannerData = savedPlanners[index];
+            updateTableDisplay(plannerData);
+        }
+
+        function editPlanner(index) {
+            selectedPlannerIndex = index;
+            const plannerData = savedPlanners[index];
+            createNewPlanner();
+            fillPlannerWithData(plannerData);
+        }
+
+        function fillPlannerWithData(plannerData) {
+            const plannerDays = document.querySelectorAll('.planner-day');
+            plannerDays.forEach((day, dayIndex) => {
+                const dayName = day.querySelector('h3').innerText;
+                const lessons = plannerData.filter(entry => entry.dayName === dayName);
+                const lessonList = day.querySelector('ul');
+                lessonList.innerHTML = '';
+                
+                lessons.forEach(lesson => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'lesson-row';
+                    listItem.innerHTML = `
+                        <input type="text" placeholder="Ders Adı" value="${lesson.dersAdi}">
+                        <input type="text" placeholder="Ders Saati (Örnek: 10:00)" value="${lesson.dersSaati}">
+                        <input type="text" placeholder="Tarih (Örnek: 2025-07-22)" value="${lesson.tarih}">
+                    `;
+                    lessonList.appendChild(listItem);
+                });
+                
+                const addButton = document.createElement('li');
+                addButton.innerHTML = '<button class="add-lesson-btn" onclick="addLesson(this)">+ Ders Ekle</button>';
+                lessonList.appendChild(addButton);
+            });
+        }
+
+        function deletePlanner(index) {
+            if (confirm(`Program ${index + 1} silmek istiyor musunuz?`)) {
+                savedPlanners.splice(index, 1);
+                localStorage.setItem('savedPlanners', JSON.stringify(savedPlanners));
+                updateSavedPlannersList();
+                updateTableDisplay([]);
+            }
+        }
+
+        function updateTableDisplay(plannerData) {
+            const tableDisplay = document.getElementById('table-display');
+            let tableHtml = '<table><tr><th>Gün</th><th>Ders Adı</th><th>Ders Saati</th><th>Tarih</th></tr>';
+            
+            const uniqueLessons = new Set();
+            const filteredData = [];
+            
+            plannerData.forEach(entry => {
+                const lessonKey = `${entry.dayName}-${entry.dersAdi}-${entry.dersSaati}-${entry.tarih}`;
+                if (!uniqueLessons.has(lessonKey)) {
+                    uniqueLessons.add(lessonKey);
+                    filteredData.push(entry);
+                }
+            });
+
+            filteredData.forEach(entry => {
+                tableHtml += `<tr><td>${entry.dayName}</td><td>${entry.dersAdi}</td><td>${entry.dersSaati}</td><td>${entry.tarih}</td></tr>`;
+            });
+            
+            tableHtml += '</table>';
+            tableDisplay.innerHTML = tableHtml;
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const element = document.getElementById('table-display');
+            const quote = document.querySelector('.quote').innerText;
+
+            html2canvas(element).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                doc.setFontSize(12);
+                doc.text(quote, 10, doc.internal.pageSize.height - 10);
+                doc.save('program.pdf');
+            });
+        }
+
+        function exportToJPG() {
+            const element = document.getElementById('table-display');
+            const quote = document.querySelector('.quote').innerText;
+
+            html2canvas(element).then(canvas => {
+                const imgData = canvas.toDataURL('image/jpeg');
+                const link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'program.jpg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Add quote to the image
+                const img = new Image();
+                img.src = imgData;
+                img.onload = () => {
+                    const canvasWithQuote = document.createElement('canvas');
+                    canvasWithQuote.width = img.width;
+                    canvasWithQuote.height = img.height + 30; // Space for the quote
+                    const ctx = canvasWithQuote.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    ctx.font = '12px Arial';
+                    ctx.fillStyle = '#555';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(quote, img.width / 2, img.height + 20);
+                    const finalImgData = canvasWithQuote.toDataURL('image/jpeg');
+                    link.href = finalImgData;
+                    link.click();
+                };
+            });
+        }
+
+        window.onload = () => {
+            savedPlanners = JSON.parse(localStorage.getItem('savedPlanners')) || [];
+            updateSavedPlannersList();
+        };
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
