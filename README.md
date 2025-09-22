@@ -1,0 +1,1 @@
+# haftalik_calisma_programi_hazirlayici
